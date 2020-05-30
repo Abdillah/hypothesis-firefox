@@ -1,0 +1,28 @@
+{
+
+  "description": "Unofficial. Serve Hypothes.is on any sites even under CSP.",
+  "manifest_version": 2,
+  "name": "Hypothes.is bookmarklet",
+  "version": "1.0",
+  "homepage_url": "https://github.com/Abdillah/hypothesis-firefox",
+  "icons": {
+    "48": "icons/hypothesis-48.png"
+  },
+
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>"
+  ],
+
+  "background": {
+    "scripts": [ "background.js" ] 
+  },
+  
+  "content_scripts": [
+    {
+      "matches": [ "<all_urls>" ],
+      "js": [ "hypothesis.js" ]
+    }
+  ]
+}

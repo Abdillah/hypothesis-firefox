@@ -30,3 +30,5 @@ Along the respective [contributors](https://github.com/Abdillah/kuryuk/graph/con
 
 ## License
 This project is licensed under [MPLv2.0](./LICENSE).
+
+The artwork icon is Hypothes.is official logo therefor is owned by Hypothes.is team and respective contributors.

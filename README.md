@@ -11,7 +11,7 @@ Unfortunately, the long awaited Firefox plugin still in development and only boo
 
 ## Usage
 Visit [Mozilla Firefox Addon page](https://addons.mozilla.org/en-US/firefox/addon/hypothes-is-bookmarklet/) then install the extension.
-In the near future, we may also provide installable versions on [Releases](./releases) section.
+You can also head to the [Releases](https://github.com/Abdillah/hypothesis-firefox/releases) section and download the latest XPI binary, it will auto install.
 
 To build yourself, see [this reference](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/).
 
@@ -26,14 +26,14 @@ This project is authored and maintained by
 
 - [@Abdillah](https://github.com/Abdillah) – Hernawan Faïz Abdillah
 
-Along the respective [contributors](https://github.com/Abdillah/kuryuk/graph/contributors).
+Along the respective [contributors](https://github.com/Abdillah/hypothesis-firefox/graph/contributors).
 
-## Contributes
-Consider it useful? Join into the effort.
+## Contribute
+Consider it useful? Join into the effort by [creating pull request](https://github.com/Abdillah/hypothesis-firefox/compare) or [raising issue](https://github.com/Abdillah/hypothesis-firefox/issues/new). You may also give support fund.
+
+<a href="https://ko-fi.com/O4O41RQ9G" target="\_blank"><img height="36" style="border:0px;height:36px;" src="https://cdn.ko-fi.com/cdn/kofi2.png?v=2" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
 [![Liberapay](https://img.shields.io/badge/Liberapay-Abdillah-yellow)](https://liberapay.com/abdillah/donate)
-
-[![Patreon](https://img.shields.io/badge/Patreon-Abdillah-red)](https://patreon.com/abdillah)
 
 
 ## License

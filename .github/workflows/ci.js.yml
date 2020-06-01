@@ -27,3 +27,8 @@ jobs:
     - run: npm ci
     - run: npm test
     - run: npm run build --if-present
+    - name: Upload CI build
+      uses: actions/upload-artifact@v2
+      with:
+        name: hypothes.is_bookmarklet_${{ github.run_id }}.zip
+        path: web-ext-artifacts/*.zip

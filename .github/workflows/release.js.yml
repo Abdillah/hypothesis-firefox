@@ -1,22 +1,16 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+name: Release build
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  release:
+    types:
+    - created
 
 jobs:
-  build:
-
+  sign:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x, 14.x]
 
     env:
       AMO_ISSUER: ${{ secrets.AMO_ISSUER }}
@@ -28,14 +22,23 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 14.x
     - name: Dump GitHub context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
+
+    - name: Set BUILD_VERSION
+      run: echo '::set-env name=BUILD_VERSION::'$(npm run --silent version)
     - name: Set BUILD_ID for unique sign version
-      run: echo '::set-env name=BUILD_ID::'${{ github.run_id }}$(( ( RANDOM % 100 ) ))
+      run: echo '::set-env name=BUILD_ID::.0autobuild'
+
     - run: npm run version
     - run: npm ci
-    - run: npm run build --if-present
     - run: npm test
+    - run: npm run sign --if-present
+    - name: Upload release auto-build
+      uses: actions/upload-artifact@v2
+      with:
+        name: hypothes.is_bookmarklet_${{ env.BUILD_VERSION }}${{ env.BUILD_ID }}.xpi
+        path: web-ext-artifacts/*.xpi

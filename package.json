@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "version": "echo $(cat manifest.json | grep '\"version\"' | sed -E 's/.*\"version\":\\ \"([^\\\"]+)\".*/\\1/g')\".0nightly\"$(git rev-parse HEAD | tr -d -c 0-9 | cut -c 1-4)$BUILD_ID",
-    "pre-build": "sed -i -E \"s@(\\\"version\\\":\\ *\\\")[0-9\\.]+\\\"@\\1$(npm run --silent version)\\\"@g\" manifest.json",
-    "build": "npm run pre-build; web-ext sign --api-key $AMO_ISSUER --api-secret $AMO_SECRET --id $AMO_ID"
+    "version": "echo $(cat manifest.json | grep '\"version\"' | sed -E 's/.*\"version\":\\ \"([^\\\"]+)\".*/\\1/g')$BUILD_ID",
+    "build": "web-ext build",
+    "pre-sign": "sed -i -E \"s@(\\\"version\\\":\\ *\\\")[0-9\\.]+\\\"@\\1$(npm run --silent version)\\\"@g\" manifest.json",
+    "sign": "npm run pre-sign; web-ext sign --api-key $AMO_ISSUER --api-secret $AMO_SECRET --id $AMO_ID"
   },
   "devDependencies": {
     "web-ext": "^4.2.0"

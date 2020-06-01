@@ -1,0 +1,43 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Nightly build
+
+on:
+  schedule:
+    - cron:  '0 0 * * *'
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+
+    env:
+      AMO_ISSUER: ${{ secrets.AMO_ISSUER }}
+      AMO_SECRET: ${{ secrets.AMO_SECRET }}
+      AMO_ID: ${{ secrets.AMO_ID }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
+    - name: Set BUILD_VERSION
+      run: echo '::set-env name=BUILD_VERSION::'$(npm run --silent version)
+    - name: Set BUILD_ID for unique sign version
+      run: echo '::set-env name=BUILD_ID::.0nightly'$(git rev-parse HEAD | tr -d -c 0-9 | cut -c 1-4)${{ github.run_id }}$(( ( RANDOM % 100 ) ))
+
+    - run: npm run version
+    - run: npm ci
+    - run: npm test
+    - run: npm run sign --if-present
+    - name: Upload nightly build
+      uses: actions/upload-artifact@v2
+      with:
+        name: hypothes.is_bookmarklet_${{ env.BUILD_VERSION }}${{ env.BUILD_ID }}.xpi
+        path: web-ext-artifacts/*.xpi

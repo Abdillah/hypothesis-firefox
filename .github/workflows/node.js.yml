@@ -34,7 +34,7 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
     - name: Set BUILD_ID for unique sign version
-      run: echo '::set-env name=BUILD_ID::'${{ github.run_id }}$(( ( RANDOM % 10 ) ))
+      run: echo '::set-env name=BUILD_ID::'${{ github.run_id }}$(( ( RANDOM % 100 ) ))
     - run: npm run version
     - run: npm ci
     - run: npm run build --if-present

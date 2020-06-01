@@ -39,5 +39,5 @@ jobs:
     - name: Upload nightly build
       uses: actions/upload-artifact@v2
       with:
-        name: hypothes.is_bookmarklet_${{ env.BUILD_VERSION }}${{ env.BUILD_ID }}.xpi
-        path: web-ext-artifacts/*.xpi
+        name: hypothes.is_bookmarklet-${{ env.BUILD_VERSION }}${{ env.BUILD_ID }}.xpi
+        path: web-ext-artifacts/hypothes.is_bookmarklet-${{ env.BUILD_VERSION }}${{ env.BUILD_ID }}.xpi

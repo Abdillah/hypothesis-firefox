@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "pre-build": "cp manifest.json manifest-nightly.json && sed -i -E \"s@(\\\"version\\\":\\ *\\\"[0-9\\.]+)\\\"@\\1.0nightly\"$(git rev-parse HEAD | tr -d -c 0-9 | cut -c 1-6)$BUILD_ID\"\\\"@g\" manifest-nightly.json && mv manifest.json manifest.json.ori && mv manifest-nightly.json manifest.json",
-    "post-build": "mv manifest.json.ori manifest.json",
-    "build": "npm run pre-build; web-ext sign --api-key $AMO_ISSUER --api-secret $AMO_SECRET --id $AMO_ID; npm run post-build"
+    "version": "echo $(cat manifest.json | grep '\"version\"' | sed -E 's/.*\"version\":\\ \"([^\\\"]+)\".*/\\1/g')\".0nightly\"$(git rev-parse HEAD | tr -d -c 0-9 | cut -c 1-4)$BUILD_ID",
+    "pre-build": "sed -i -E \"s@(\\\"version\\\":\\ *\\\")[0-9\\.]+\\\"@\\1$(npm run --silent version)\\\"@g\" manifest.json",
+    "build": "npm run pre-build; web-ext sign --api-key $AMO_ISSUER --api-secret $AMO_SECRET --id $AMO_ID"
   },
   "devDependencies": {
     "web-ext": "^4.2.0"

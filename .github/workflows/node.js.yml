@@ -22,7 +22,7 @@ jobs:
       AMO_ISSUER: ${{ secrets.AMO_ISSUER }}
       AMO_SECRET: ${{ secrets.AMO_SECRET }}
       AMO_ID: ${{ secrets.AMO_ID }}
-      BUILD_ID: ${{ github.job }}
+      BUILD_ID: ${{ github.run_id }}
 
     steps:
     - uses: actions/checkout@v2

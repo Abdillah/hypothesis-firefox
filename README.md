@@ -3,6 +3,7 @@ Unofficial Hypothes.is addon for Firefox.
 
 ![License: MPLv2.0](https://img.shields.io/badge/License-MPLv2.0-blue)
 [![Firefox Addon](https://img.shields.io/amo/v/hypothes-is-bookmarklet)](https://addons.mozilla.org/en-US/firefox/addon/hypothes-is-bookmarklet/)
+![Continuous Integration](https://github.com/Abdillah/hypothesis-firefox/workflows/Continuous%20Integration/badge.svg)
 
 ## What is This?
 Hypothes.is is Open Source web page annotation software that provide public and private annotation.

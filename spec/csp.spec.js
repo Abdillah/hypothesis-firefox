@@ -78,12 +78,12 @@ describe('Content Security Policy (CSP) Patcher', function () {
             );
         });
 
-        // it("should throw when 'nonce-*' and hash rule exists", function () {
-        //     const csp = "Content-Security-Policy: default-src 'none'; base-uri 'self' 'sha256-edeaaff3f1774ad2888673770c6d64097e391bc362d7d6fb34982ddf0efd18cb';";
-        //     Assert.throws(function () {
-        //         return CSPPatcher.create(csp).addHost('base-uri', 'hypothes.is').toString();
-        //     });
-        // });
+        it("should throws when 'nonce-*' and hash rule exists", function () {
+            const csp = "Content-Security-Policy: default-src 'none'; base-uri 'self'; script-src 'self' cdn.bootstrap.com 'sha256-edeaaff3f1774ad2888673770c6d64097e391bc362d7d6fb34982ddf0efd18cb';";
+            Assert.throws(function () {
+                return CSPPatcher.create(csp).addHost('script-src', 'hypothes.is').toString();
+            });
+        });
     });
 
     describe('#hasHashRule and #hasNonceRule', function () {

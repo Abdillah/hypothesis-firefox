@@ -1,6 +1,12 @@
 const parse = require('./parser');
 const unparse = require('./unparser');
 
+class UnapplicablePatch extends Error {
+    constructor(message) {
+        this.message = message;
+    }
+}
+
 class CSPPatcher {
     constructor(cspstr) {
         this.cspstr = cspstr;
@@ -43,6 +49,11 @@ class CSPPatcher {
 
         // Sanitize host
         host = host.replace(/[^A-z0-9\.-]/g, '');
+
+        // Check for nonce & hash
+        if ((to == 'script-src' || to == 'style-src') && (this.hasHashRule(to) || this.hasNonceRule(to))) {
+            throw new UnapplicablePatch("Added host will not take effect when hash & nonce rule exists.");
+        }
 
         var ocsp = parse(this.cspstr);
         var dest = ocsp[to];

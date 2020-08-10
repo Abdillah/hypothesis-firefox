@@ -15,6 +15,10 @@ module.exports = function (cspstr) {
         var spacepos = section.trim().indexOf(' ');
         var key = section.substr(0, spacepos);
         var val = section.substr(spacepos + 1, section.length);
+        if (key == '') {
+            return sum
+        }
+
         sum[key] = parseValueToArr(val);
         return sum;
     }, {});

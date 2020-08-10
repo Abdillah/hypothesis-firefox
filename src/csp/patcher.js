@@ -16,10 +16,7 @@ class CSPPatcher {
     hasHashRule(part) {
         var hashpat = "'(sha256|sha384|sha512)-([a-z0-9]+)'";
         var matched = this.cspstr.match(new RegExp(`${part} [^;]+;`));
-        if (matched === null) {
-            return false;
-        }
-        var partrule = matched[0];
+        var partrule = matched? matched[0] : this.cspstr;
         return partrule.length? (new RegExp(hashpat)).test(partrule) : false;
     }
 
@@ -29,10 +26,7 @@ class CSPPatcher {
     hasNonceRule(part) {
         var noncepat = "'nonce-([a-z0-9]+)'";
         var matched = this.cspstr.match(new RegExp(`${part} [^;]+;`));
-        if (matched === null) {
-            return false;
-        }
-        var partrule = matched[0];
+        var partrule = matched? matched[0] : this.cspstr;
         return partrule.length? (new RegExp(noncepat)).test(partrule) : false;
     }
 

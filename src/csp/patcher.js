@@ -11,6 +11,32 @@ class CSPPatcher {
     }
 
     /**
+     * Detect hash rule exists in @param{part}
+     */
+    hasHashRule(part) {
+        var hashpat = "'(sha256|sha384|sha512)-([a-z0-9]+)'";
+        var matched = this.cspstr.match(new RegExp(`${part} [^;]+;`));
+        if (matched === null) {
+            return false;
+        }
+        var partrule = matched[0];
+        return partrule.length? (new RegExp(hashpat)).test(partrule) : false;
+    }
+
+    /**
+     * Detect hash rule exists in @param{part}
+     */
+    hasNonceRule(part) {
+        var noncepat = "'nonce-([a-z0-9]+)'";
+        var matched = this.cspstr.match(new RegExp(`${part} [^;]+;`));
+        if (matched === null) {
+            return false;
+        }
+        var partrule = matched[0];
+        return partrule.length? (new RegExp(noncepat)).test(partrule) : false;
+    }
+
+    /**
      * Whitelist @param{host} on specific CSP @param{to} rule
      *
      * This script may tweak the resulting CSP as to allow this host

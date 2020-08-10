@@ -85,4 +85,24 @@ describe('Content Security Policy (CSP) Patcher', function () {
         //     });
         // });
     });
+
+    describe('#hasHashRule', function () {
+        it('should not detect when no hash rule exist', function () {
+            Assert.ok(false === CSPPatcher.create(minimalcsp).hasHashRule('base-uri'));
+        });
+
+        it('should detect various hash type rule', function () {
+            Assert.ok(true === CSPPatcher.create("Content-Security-Policy: default-src 'none'; base-uri 'self' 'sha256-edeaaff3f1774ad2888673770c6d64097e391bc362d7d6fb34982ddf0efd18cb';").hasHashRule('base-uri'));
+        });
+    });
+
+    describe('#hasNonceRule', function () {
+        it('should not detect when no nonce rule exist', function () {
+            Assert.ok(false === CSPPatcher.create(minimalcsp).hasNonceRule());
+        });
+
+        it('should detect various nonce type rule', function () {
+            Assert.ok(true === CSPPatcher.create("Content-Security-Policy: default-src 'none'; base-uri 'self' 'nonce-64097e3';").hasNonceRule('base-uri'));
+        });
+    });
 });

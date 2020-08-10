@@ -1,4 +1,4 @@
-const assert = require('assert');
+const Assert = require('assert');
 
 describe('Content Security Policy (CSP) Parser / Unparser', function () {
     const parse = require('../src/csp/parser');
@@ -17,8 +17,8 @@ describe('Content Security Policy (CSP) Parser / Unparser', function () {
         ];
 
         for (var f of fixtures) {
-            assert.deepEqual(parse(f[0]), f[1]);
-            assert.deepEqual(unparse(f[1]), f[0]);
+            Assert.deepEqual(parse(f[0]), f[1]);
+            Assert.deepEqual(unparse(f[1]), f[0]);
         }
     });
 
@@ -35,8 +35,8 @@ describe('Content Security Policy (CSP) Parser / Unparser', function () {
         ];
 
         for (var f of fixtures) {
-            assert.deepEqual(parse(f[0]), f[1]);
-            assert.deepEqual(unparse(f[1]), f[0]);
+            Assert.deepEqual(parse(f[0]), f[1]);
+            Assert.deepEqual(unparse(f[1]), f[0]);
         }
     });
 });

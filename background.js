@@ -1,3 +1,5 @@
+import { CspPatcher } from './src/csp/patcher.js';
+
 async function sha256(message) {
     // encode as UTF-8
     const msgBuffer = new TextEncoder('utf-8').encode(message);
@@ -19,17 +21,23 @@ async function onHeaderPassed(details) {
         return {};
     }
 
-    let cspIdx = details.responseHeaders.findIndex(function (headeritem) {
+    let cspIdx = details.responseHeaders
+    .findIndex(function (headeritem) {
         return headeritem.name.toLowerCase() == "content-security-policy" && headeritem.value.indexOf('script-src ') !== -1;
     });
     if (cspIdx != -1) {
         var results = await browser.storage.local.get('hypothesisHash');
         var csp = details.responseHeaders[cspIdx];
-        var patchedCsp = csp.value
-        .replace(/default-src ([^;]+);/, "default-src hypothes.is $1;")
-        .replace(/frame-src ([^;]+);/, "frame-src hypothes.is $1;")
-        .replace(/script-src ([^;]+);/, "script-src cdn.hypothes.is $1 'sha256-" + results['hypothesisHash'] + "';")
-        .replace(/style-src ([^;]+);/, "style-src cdn.hypothes.is 'unsafe-inline' $1;");
+        var patchedCsp = CspPatcher.create(csp.value)
+        .addHost('default-src', "https://hypothes.is")
+        .addHost('frame-src', "https://hypothes.is")
+        .addHost('script-src', "https://cdn.hypothes.is")
+        // Hash of inline hypothesisConfig textContent
+        .addHost('script-src', "'nonce-w9s09t'")
+        .addHost('script-src', `'sha256-${results['hypothesisHash']}'`)
+        .addHost('style-src', "https://cdn.hypothes.is")
+        .addHost('style-src', "'unsafe-inline'")
+        .toString();
 
         details.responseHeaders[cspIdx].value = patchedCsp;
     }

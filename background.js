@@ -42,10 +42,7 @@ async function onHeaderPassed(details) {
 async function onPageActionClicked() {
     var config = await browser.storage.local.get('activeSites');
     var isEnabled = (config.activeSites && config.activeSites[currentTab.url]) || false;
-
-    console.log("Before toggle", config);
-    let hasDisabled = toggleHypothesis(!isEnabled);
-    togglePgActionIcon(!hasDisabled);
+    toggleHypothesis(!isEnabled);
 }
 
 async function togglePgActionIcon(toActive) {
@@ -78,38 +75,38 @@ async function togglePgActionIcon(toActive) {
     }
 }
 
-async function toggleHypothesis(toActive) {
-    var command = toActive ? "hypothesis.enable()" : "hypothesis.disable()"
-    console.log("Execute: " + command, toActive);
-    // Dispatch update
-    console.log("- Result: ", await browser.tabs.executeScript(currentTab.id, {
-        code: command,
-    }));
+async function syncTabHypothesis() {
+    var config = await browser.storage.local.get('activeSites');
+    var isEnabled = (config.activeSites && config.activeSites[currentTab.url]) || false;
 
+    // Setup icon
+    togglePgActionIcon(isEnabled);
+
+    // Reapply command
+    var command = isEnabled ? "hypothesis.enable()" : "hypothesis.disable()"
+    await browser.tabs.executeScript(currentTab.id, {
+        code: command,
+    });
+}
+
+async function toggleHypothesis(toActive) {
     // Save toggle
     var config = await browser.storage.local.get('activeSites');
     if (typeof config.activeSites === 'undefined') {
         config.activeSites = {};
     }
     config.activeSites[currentTab.url] = toActive;
-    console.log("After edit::",  config);
-    browser.storage.local.set({
+    await browser.storage.local.set({
         activeSites: config['activeSites']
     });
 
-    var config = await browser.storage.local.get();
-    console.log("After toggle", config);
-
+    await syncTabHypothesis();
     return toActive;
 }
 
 async function setupPageAction() {
-    console.log("Current tab:", currentTab);
     browser.pageAction.show(currentTab.id);
-
-    var config = await browser.storage.local.get('activeSites');
-    var isEnabled = (config.activeSites && config.activeSites[currentTab.url]) || false;
-    return togglePgActionIcon(isEnabled);
+    await syncTabHypothesis();
 }
 
 /*
@@ -123,7 +120,9 @@ function updateActiveTab() {
     }
 
     var gettingActiveTab = browser.tabs.query({ active: true, currentWindow: true });
-    return gettingActiveTab.then(updateTab);
+    return gettingActiveTab
+    .then(updateTab)
+    .then(setupPageAction);
 }
 
 /** ----------------- *
@@ -146,13 +145,7 @@ browser.pageAction.onClicked.addListener(onPageActionClicked);
  *  Main
  * ----- */
 
-console.log("hypothesis: Hello!");
-
 var currentTab;
-
-// update when the extension loads initially
-updateActiveTab()
-.then(setupPageAction);
 
 // Setting up CSP
 fetch('https://hypothes.is/embed.js')
@@ -168,9 +161,9 @@ fetch('https://hypothes.is/embed.js')
     );
 });
 
-// Toggle hypothesis
-browser.storage.local.get('activeSites')
-.then( function(activeSites) {
-    isEnabled = activeSites[currentTab.url] || false;
-    toggleHypothesis(!isEnabled);
+// update when the extension loads initially
+updateActiveTab()
+.then(setupPageAction)
+.then(function () {
+    syncTabHypothesis();
 });

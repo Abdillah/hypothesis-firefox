@@ -1,11 +1,22 @@
 var hypothesis;
 
 (async function() {
+    if (window.document.querySelector('hypothesis-sidebar')) {
+        var config = await browser.storage.local.get('activeSites');
+        if (typeof config.activeSites === 'undefined') {
+            config.activeSites = {};
+        }
+        config.activeSites[window.location.href] = true;
+        await browser.storage.local.set({
+            activeSites: config.activeSites
+        });
+    }
+
     hypothesis = {
         enable: async function () {
             if (window.document.querySelector('hypothesis-sidebar')) {
-                window.document.querySelector('hypothesis-adder').style.opacity = 1;
                 window.document.querySelector('hypothesis-sidebar').style.opacity = 1;
+                window.document.querySelector('hypothesis-adder').style.opacity = 1;
                 return;
             }
 

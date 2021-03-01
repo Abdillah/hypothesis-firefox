@@ -49,21 +49,17 @@ export class CspPatcher {
         }
 
         // Sanitize host
-        host = host.replace(/[^A-z0-9\.-]/g, '');
+        host = host.replace(';', '').trim();
 
-        // Check for nonce & hash
-        if ((to == 'script-src' || to == 'style-src') && (this.hasHashRule(to) || this.hasNonceRule(to))) {
-            throw new UnapplicablePatch("Added host will not take effect when hash & nonce rule exists.");
-        }
-
-        var ocsp = parse(this.cspstr);
+        var ocsp = parse(this.cspstr || '');
         var dest = ocsp[to];
 
         // Check for 'self'
+        var hasAdded = (dest.indexOf(host) !== -1);
         var iself = 0;
-        if ((iself = dest.indexOf("'self'")) != -1) {
+        if (!hasAdded && (iself = dest.indexOf("'self'")) !== -1) {
             dest.splice(iself + 1, 0, host)
-        } else {
+        } else if (!hasAdded) {
             dest.unshift(host)
         }
         ocsp[to] = dest;

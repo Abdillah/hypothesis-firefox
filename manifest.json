@@ -3,7 +3,7 @@
   "description": "Unofficial. Serve Hypothes.is on any sites even under CSP.",
   "manifest_version": 2,
   "name": "Hypothes.is bookmarklet",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "homepage_url": "https://github.com/Abdillah/hypothesis-firefox",
   "icons": {
     "48": "icons/hypothesis-48.png"

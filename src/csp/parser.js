@@ -2,13 +2,13 @@ function parseValueToArr(val) {
     // var definedtokens = [
     //     "'self'", "'none'", "*",
     // ];
-    return val.trim().split(' ');
+    return val.trim().split(' ').filter(o => o && o.length);
 };
 
 export function parse(cspstr) {
     // Remove header key
     if (cspstr.toLowerCase().indexOf('content-security-policy:') != -1) {
-        cspstr = cspstr.split(':', 2)[1];
+        cspstr = cspstr.slice(cspstr.indexOf(':') + 1, cspstr.length);
     }
     var o = cspstr.split(';').reduce((sum, section) => {
         var section = section.trim();

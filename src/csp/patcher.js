@@ -20,21 +20,41 @@ export class CspPatcher {
     /**
      * Detect hash rule exists in @param{part}
      */
-    hasHashRule(part) {
-        var hashpat = "'(sha256|sha384|sha512)-([a-z0-9]+)'";
-        var matched = this.cspstr.match(new RegExp(`${part} [^;]+;`));
-        var partrule = matched? matched[0] : this.cspstr;
-        return partrule.length? (new RegExp(hashpat)).test(partrule) : false;
+    hasHashRule(directive) {
+        if (typeof directive === 'undefined') {
+            dirContents = Object.keys(this.ocsp).reduce((acc, key) => {
+                acc = acc.concat(this.ocsp[key]);
+                return acc;
+            }, []);
+        } else {
+            var dirContents = this.ocsp[directive] || [];
+        }
+
+        return dirContents.filter(function (item) {
+            var hashpat = "'(sha256|sha384|sha512)-([a-z0-9]+)'";
+            var matched = item.match(new RegExp(hashpat));
+            return matched && matched.length;
+        }).length > 0;
     }
 
     /**
      * Detect hash rule exists in @param{part}
      */
-    hasNonceRule(part) {
-        var noncepat = "'nonce-([a-z0-9]+)'";
-        var matched = this.cspstr.match(new RegExp(`${part} [^;]+;`));
-        var partrule = matched? matched[0] : this.cspstr;
-        return partrule.length? (new RegExp(noncepat)).test(partrule) : false;
+    hasNonceRule(directive) {
+        if (typeof directive === 'undefined') {
+            dirContents = Object.keys(this.ocsp).reduce((acc, key) => {
+                acc = acc.concat(this.ocsp[key]);
+                return acc;
+            }, []);
+        } else {
+            var dirContents = this.ocsp[directive] || [];
+        }
+
+        return dirContents.filter(function (item) {
+            var noncepat = "'nonce-([a-z0-9]+)'";
+            var matched = item.match(new RegExp(noncepat));
+            return matched && matched.length;
+        }).length > 0;
     }
 
     /**

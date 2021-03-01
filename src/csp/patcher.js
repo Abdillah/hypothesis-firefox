@@ -10,7 +10,7 @@ class UnapplicablePatch extends Error {
 
 export class CspPatcher {
     constructor(cspstr) {
-        this.cspstr = cspstr;
+        this.ocsp = parse(cspstr);
     }
 
     static create(cspstr) {
@@ -51,8 +51,7 @@ export class CspPatcher {
         // Sanitize host
         host = host.replace(';', '').trim();
 
-        var ocsp = parse(this.cspstr || '');
-        var dest = ocsp[to];
+        var dest = this.ocsp[to];
 
         // Check for 'self'
         var hasAdded = (dest.indexOf(host) !== -1);
@@ -62,9 +61,9 @@ export class CspPatcher {
         } else if (!hasAdded) {
             dest.unshift(host)
         }
-        ocsp[to] = dest;
+        this.ocsp[to] = dest;
 
-        return new CspPatcher(unparse(ocsp));
+        return new CspPatcher(unparse(this.ocsp));
     }
 
     // addUrl(to, url) {}
@@ -72,6 +71,6 @@ export class CspPatcher {
     // addHash(to, hash) {}
 
     toString() {
-        return this.cspstr.replace(/;?$/, ';');
+        return unparse(this.ocsp).trimEnd(';') + ';';
     }
 }

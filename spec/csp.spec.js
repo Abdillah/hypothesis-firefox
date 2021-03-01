@@ -17,8 +17,8 @@ describe('Content Security Policy (CSP) Parser / Unparser', function () {
         ];
 
         for (var f of fixtures) {
-            Assert.deepEqual(parse(f[0]), f[1]);
-            Assert.deepEqual(unparse(f[1]), f[0]);
+            Assert.deepStrictEqual(parse(f[0]), f[1]);
+            Assert.deepStrictEqual(unparse(f[1]), f[0]);
         }
     });
 
@@ -35,8 +35,8 @@ describe('Content Security Policy (CSP) Parser / Unparser', function () {
         ];
 
         for (var f of fixtures) {
-            Assert.deepEqual(parse(f[0]), f[1]);
-            Assert.deepEqual(unparse(f[1]), f[0]);
+            Assert.deepStrictEqual(parse(f[0]), f[1]);
+            Assert.deepStrictEqual(unparse(f[1]), f[0]);
         }
     });
 });
@@ -49,7 +49,7 @@ describe('Content Security Policy (CSP) Patcher', function () {
 
     describe('#addHost', function () {
         it('should add hypothes.is into minimal CSP', test1 = function () {
-            Assert.equal(
+            Assert.strictEqual(
                 'Content-Security-Policy: ' + CSPPatcher.create(minimalcsp).addHost('default-src', 'hypothes.is').toString(),
                 "Content-Security-Policy: default-src hypothes.is 'none'; base-uri 'self';"
             );
@@ -59,20 +59,20 @@ describe('Content Security Policy (CSP) Patcher', function () {
             test1();
 
             const csp = "Content-Security-Policy: default-src 'none'; base-uri 'self' 'none';";
-            Assert.equal(
+            Assert.strictEqual(
                 'Content-Security-Policy: ' + CSPPatcher.create(csp).addHost('base-uri', 'hypothes.is').toString(),
                 "Content-Security-Policy: default-src 'none'; base-uri 'self' hypothes.is 'none';"
             );
         });
 
         it("should add hypothes.is after 'self'", function () {
-            Assert.equal(
+            Assert.strictEqual(
                 'Content-Security-Policy: ' + CSPPatcher.create(minimalcsp).addHost('base-uri', 'hypothes.is').toString(),
                 "Content-Security-Policy: default-src 'none'; base-uri 'self' hypothes.is;"
             );
 
             const csp = "Content-Security-Policy: default-src 'none'; base-uri 'self' cdn.bootstrap.com;";
-            Assert.equal(
+            Assert.strictEqual(
                 'Content-Security-Policy: ' + CSPPatcher.create(csp).addHost('base-uri', 'hypothes.is').toString(),
                 "Content-Security-Policy: default-src 'none'; base-uri 'self' hypothes.is cdn.bootstrap.com;"
             );

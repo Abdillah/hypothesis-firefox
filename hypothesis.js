@@ -32,6 +32,7 @@ var hypothesis;
 
             var c = d.createElement('script');
             c.setAttribute('type', 'application/javascript');
+            c.setAttribute('nonce', 'w9s09t');
             c.textContent = `window.hypothesisConfig = function () {
                 return ${JSON.stringify(hypothesisConfig)};
             };`;

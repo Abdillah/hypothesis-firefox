@@ -1,19 +1,20 @@
-const parse = require('./parser');
-const unparse = require('./unparser');
+import { parse } from './parser.js';
+import { unparse } from './unparser.js';
 
 class UnapplicablePatch extends Error {
     constructor(message) {
+        super(message);
         this.message = message;
     }
 }
 
-class CSPPatcher {
+export class CspPatcher {
     constructor(cspstr) {
         this.cspstr = cspstr;
     }
 
     static create(cspstr) {
-        return new CSPPatcher(cspstr);
+        return new CspPatcher(cspstr);
     }
 
     /**
@@ -44,7 +45,7 @@ class CSPPatcher {
      */
     addHost(to, host) {
         if ([ 'default-src', 'base-uri', 'frame-src', 'script-src', 'style-src' ].indexOf(to) == -1) {
-            throw "CSPPatcher#addHost 'to' only support one of 'frame-src', 'script-src', 'style-src'";
+            throw "CspPatcher#addHost 'to' only support one of 'frame-src', 'script-src', 'style-src'";
         }
 
         // Sanitize host
@@ -67,7 +68,7 @@ class CSPPatcher {
         }
         ocsp[to] = dest;
 
-        return new CSPPatcher(unparse(ocsp));
+        return new CspPatcher(unparse(ocsp));
     }
 
     // addUrl(to, url) {}
@@ -78,5 +79,3 @@ class CSPPatcher {
         return this.cspstr.replace(/;?$/, ';');
     }
 }
-
-module.exports = CSPPatcher;

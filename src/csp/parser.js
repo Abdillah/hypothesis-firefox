@@ -5,7 +5,7 @@ function parseValueToArr(val) {
     return val.trim().split(' ');
 };
 
-module.exports = function (cspstr) {
+export function parse(cspstr) {
     // Remove header key
     if (cspstr.toLowerCase().indexOf('content-security-policy:') != -1) {
         cspstr = cspstr.split(':', 2)[1];

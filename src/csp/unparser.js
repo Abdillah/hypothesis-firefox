@@ -5,7 +5,7 @@ function parseValueToArr(val) {
     return val.trim().split(' ');
 };
 
-module.exports = function (ocsp) {
+export function unparse(ocsp) {
     var csparr = [];
     for (var k in ocsp) {
         csparr.push([ k ].concat(ocsp[k].join(' ')).join(' '));

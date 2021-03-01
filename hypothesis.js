@@ -44,9 +44,10 @@ var hypothesis;
         },
 
         disable: function () {
-            console.log("Disable hypothesis!");
-            window.document.querySelector('hypothesis-adder').style.opacity = 0;
-            window.document.querySelector('hypothesis-sidebar').style.opacity = 0;
+            if (window.document.querySelector('hypothesis-sidebar')) {
+                window.document.querySelector('hypothesis-adder').style.opacity = 0;
+                window.document.querySelector('hypothesis-sidebar').style.opacity = 0;
+            }
         },
     };
 })();

@@ -28,9 +28,9 @@ jobs:
       run: echo "$GITHUB_CONTEXT"
 
     - name: Set BUILD_VERSION
-      run: echo '::set-env name=BUILD_VERSION::'$(npm run --silent version)
-    - name: Set BUILD_ID for unique sign version
-      run: echo '::set-env name=BUILD_ID::.0nightly'$(git rev-parse HEAD | tr -d -c 0-9 | cut -c 1-4)${{ github.run_id }}$(( ( RANDOM % 100 ) ))
+      run: echo "BUILD_VERSION="$(npm run --silent version) >> $GITHUB_ENV
+    - name: Set BUILD_ID
+      run: echo "BUILD_ID=.0nightly"$(git rev-parse HEAD | tr -d -c 0-9 | cut -c 1-4)${{ github.run_id }}$(( ( RANDOM % 100 ) )) >> $GITHUB_ENV
 
     - run: npm run version
     - run: npm ci

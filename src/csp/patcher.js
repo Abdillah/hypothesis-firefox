@@ -72,6 +72,10 @@ export class CspPatcher {
         host = host.replace(';', '').trim();
 
         var dest = this.ocsp[to];
+        if (typeof dest === 'undefined') {
+            // No modification because we don't need to
+            return this;
+        }
 
         // Check for 'self'
         var hasAdded = (dest.indexOf(host) !== -1);

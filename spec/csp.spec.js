@@ -130,5 +130,13 @@ describe('Content Security Policy (CSP) Patcher', function () {
             // No empty entries
             Assert.ok(patchedCsp.indexOf('  ') === -1);
         })
+
+        it('should add host to yerinalexey.srht.site', function () {
+            var csp = "content-security-policy: default-src 'self' 'unsafe-eval' 'unsafe-inline' data:; sandbox allow-forms allow-orientation-lock allow-pointer-lock allow-presentation allow-same-origin allow-scripts;";
+            var patchedCsp = this.patch(csp);
+
+            // No empty entries
+            Assert.ok(patchedCsp.indexOf('  ') === -1);
+        })
     })
 });

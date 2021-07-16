@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "version": "echo $(cat manifest.json | grep '\"version\"' | sed -E 's/.*\"version\":\\ \"([^\\\"]+)\".*/\\1/g')$BUILD_ID",
     "build": "web-ext build",

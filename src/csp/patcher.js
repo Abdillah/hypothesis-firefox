@@ -18,6 +18,13 @@ export class CspPatcher {
     }
 
     /**
+     * Determine specific CSP rule e.g. script-src, sandbox
+     */
+    hasRule(directive) {
+        return directive in this.ocsp;
+    }
+
+    /**
      * Detect hash rule exists in @param{part}
      */
     hasHashRule(directive) {

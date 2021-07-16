@@ -16,24 +16,35 @@ async function sha256(message) {
 }
 
 async function onHeaderPassed(details) {
-    // Filter only response from document URL to patch
+    // Filter out non top-level response URL
     if (details.url.length <= 0 || typeof details.documentUrl !== 'undefined') {
         return {};
     }
 
     let cspIdx = details.responseHeaders
     .findIndex(function (headeritem) {
-        return headeritem.name.toLowerCase() == "content-security-policy" && headeritem.value.indexOf('script-src ') !== -1;
+        return headeritem.name.toLowerCase() == "content-security-policy"
+            && (headeritem.value.indexOf('default-src ') !== -1 || headeritem.value.indexOf('script-src ') !== -1)
+        ;
     });
     if (cspIdx != -1) {
         var results = await browser.storage.local.get('hypothesisHash');
         var csp = details.responseHeaders[cspIdx];
-        var patcher = CspPatcher.create(csp.value)
-        .addHost('default-src', "https://hypothes.is")
-        .addHost('frame-src', "https://hypothes.is")
-        .addHost('script-src', "https://cdn.hypothes.is")
-        .addHost('style-src', "https://cdn.hypothes.is")
-        .addHost('style-src', "'unsafe-inline'");
+
+        var patcher = CspPatcher.create(csp.value);
+        patcher = patcher
+            .addHost('default-src', "https://hypothes.is")
+            .addHost('frame-src', "https://hypothes.is")
+            .addHost('script-src', "https://cdn.hypothes.is")
+            .addHost('style-src', "https://cdn.hypothes.is")
+            .addHost('style-src', "'unsafe-inline'")
+        ;
+
+        // When only default-src available, we must add CDN URL to it
+        if (!patcher.hasRule('script-src') || !patcher.hasRule('style-src')) {
+            patcher = patcher
+            .addHost('default-src', "https://cdn.hypothes.is")
+        }
 
         if (patcher.hasHashRule('script-src') || patcher.hasNonceRule('script-src')) {
             patcher = patcher

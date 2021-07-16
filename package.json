@@ -5,10 +5,9 @@
     "build": "web-ext build",
     "pre-sign": "sed -i -E \"s@(\\\"version\\\":\\ *\\\")[0-9\\.]+\\\"@\\1$(npm run --silent version)\\\"@g\" manifest.json",
     "sign": "npm run pre-sign; web-ext sign --api-key $AMO_ISSUER --api-secret $AMO_SECRET --id $AMO_ID",
-    "test": "mocha -r esm spec"
+    "test": "mocha spec"
   },
   "devDependencies": {
-    "esm": "^3.2.25",
     "mocha": "^8.1.1",
     "web-ext": "^5.5.0"
   }

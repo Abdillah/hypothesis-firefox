@@ -34,8 +34,7 @@ Consider it useful? Join into the effort by [creating pull request](https://gith
 
 <a href="https://ko-fi.com/O4O41RQ9G" target="\_blank"><img height="36" style="border:0px;height:36px;" src="https://cdn.ko-fi.com/cdn/kofi2.png?v=2" border="0" alt="Buy Me a Coffee at ko-fi.com" /></a>
 
-[![Liberapay](https://img.shields.io/badge/Liberapay-Abdillah-yellow)](https://liberapay.com/abdillah/donate)
-
+If you wish to send through other ways, DM me on Twitter @fazbdillah.
 
 ## License
 This project is licensed under [MPLv2.0](./LICENSE).
